@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Apartments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #0C3844;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(12, 56, 68, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(12, 56, 68, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo img {
+          height: 120px; /* visina loga koja stane u navbar */
+          width: auto;  /* da proporcija ostane ista */
+          display: block;
+        }
+
+
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links li a.active {
+    color: #FFD700; /* narandžasta za aktivni link */
+    font-weight: 500;
+    
+}
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            height: 70vh;
+            background: linear-gradient(135deg, #0C3844 0%, #1e5f6f 100%);
+            display: flex;
+            align-items: center;      /* centrira vertikalno */
+            justify-content: center;  /* centrira horizontalno */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px; /* da ne ide preko cele širine */
+            margin: 0 auto;   /* centrira dodatno unutar containera */
+            color: #fff;
+        }
+
+
+        .header-section h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        .header-section::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #7dd3c0, transparent);
+            margin: 30px auto 0;
+        }
+
+        /* Filter Buttons */
+        .filter-section {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(125, 211, 192, 0.3);
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #7dd3c0;
+            border-color: #7dd3c0;
+            color: #0C3844;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(125, 211, 192, 0.3);
+        }
+
+        /* Gallery Grid */
+        .gallery-section {
+            padding: 30px 20px 80px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-item {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* popunjava cijeli prostor bez istezanja */
+            display: block;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(125, 211, 192, 0.25);
+        }
+
+        .image-wrapper {
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #154c5a 0%, #1a5865 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .gallery-item:hover .image-wrapper {
+            transform: scale(1.1);
+        }
+
+        .image-wrapper {
+            transition: transform 0.4s ease;
+        }
+
+        .placeholder-text {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1rem;
+        }
+
+        .gallery-caption {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .gallery-caption h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #7dd3c0;
+        }
+
+        .gallery-caption p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            position: relative;
+        }
+
+        .lightbox img {
+            max-width: 90vw;   /* max 90% širine ekrana */
+            max-height: 90vh;  /* max 90% visine ekrana */
+            object-fit: contain; /* zadrži proporcije slike */
+            border-radius: 10px; /* zaobljeni rubovi (opcionalno) */
+        }
+
+        
+
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 80px 20px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonials-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+            letter-spacing: 1px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 35px;
+            border-radius: 12px;
+            border-left: 4px solid #7dd3c0;
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            color: #7dd3c0;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #0C3844;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Map Section */
+        .map-section {
+            padding: 80px 20px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .map-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+        }
+
+        .map-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 50px;
+            letter-spacing: 1px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px 40px;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: #7dd3c0;
+            margin-bottom: 15px;
+        }
+
+        .contact-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-value {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 2.2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .testimonials-section h2,
+            .map-section h2,
+            .contact-section h2 {
+                font-size: 2rem;
+            }
+
+            .contact-info {
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <a href="index.html">
+                <img src="src/assets/images/1000025093.png" alt="Kayaville Logo" width="150">
+            </a>
+        </div>
+
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="reservation.html">Reservation</a></li>
+                <li><a href="#" class="active">Gallery</a></li>         
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Our Apartments Gallery</h1>
+            <p>Explore our elegant apartments designed for comfort and relaxation.</p>
+        </div>
+    </section>
+
+
+    <!-- Filter Buttons -->
+    <div class="filter-section">
+        <div class="container">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All</button>           
+                <button class="filter-btn" data-filter="bedroom">Bedroom</button>
+                <button class="filter-btn" data-filter="kitchen">Kitchen</button>
+                <button class="filter-btn" data-filter="toilet">Bathroom</button>
+                <button class="filter-btn" data-filter="terrace">Terrace</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery -->
+    <div class="gallery-section">
+        <div class="container">
+            <div class="gallery-grid">
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02055.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02022.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02083.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02087.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02096.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02100.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02112.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02120.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02124.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02129.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02137.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02138.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02005.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02014.jpg" alt="Master Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Comfort and style</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="kitchen">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02169.jpg" alt="Designer Kitchen">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Kitchen</h3>
+                        <p>Fully equipped</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="kitchen">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02050.jpg" alt="Designer Kitchen">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Kitchen</h3>
+                        <p>Fully equipped</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="terrace">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02140.jpg" alt="Terrace">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Private Terrace</h3>
+                        <p>Breathtaking views</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="terrace">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02148.jpg" alt="Terrace">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Private Terrace</h3>
+                        <p>Breathtaking views</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="terrace">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02157.jpg" alt="Terrace">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Private Terrace</h3>
+                        <p>Breathtaking views</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="toilet">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02038.jpg" alt="Toilet">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bathroom</h3>
+                        <p>Perfect for relaxation</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="toilet">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02029.jpg" alt="Toilet">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bathroom</h3>
+                        <p>Spacious and elegant</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="toilet">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02175.jpg" alt="Toilet">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bathroom</h3>
+                        <p>Perfect for relaxation</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="toilet">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02178.jpg" alt="Toilet">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bathroom</h3>
+                        <p>Perfect for relaxation</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="toilet">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02180.jpg" alt="Toilet">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bathroom</h3>
+                        <p>Perfect for relaxation</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="toilet">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02198.jpg" alt="Toilet">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bathroom</h3>
+                        <p>Perfect for relaxation</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="toilet">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02202.jpg" alt="Toilet">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bathroom</h3>
+                        <p>Perfect for relaxation</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-category="bedroom">
+                    <div class="image-wrapper">
+                        <img src="src/assets/images/DSC02017.jpg" alt="Guest Bedroom">
+                    </div>
+                    <div class="gallery-caption">
+                        <h3>Bedroom</h3>
+                        <p>Peaceful retreat</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+        <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close" id="lightbox-close">&times;</span>
+            <img id="lightbox-image" src="" alt="">
+            <h3 id="lightbox-title"></h3>
+            <p id="lightbox-description"></p>
+        </div>
+        </div>
+
+
+    <!-- Testimonials -->
+    <div class="testimonials-section">
+        <div class="container">
+            <h2>What Our Guests Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"My people, I have never experienced such hospitality, philanthropy and helpfulness in my 63 years! This is much more than just renting out, otherwise extremely comfortable, apartments. Tidiness like in the operating room of a Geneva clinic. Not a trace of any kitsch, and these people are so wonderful and beautiful, because their faces radiate their honest souls. We can't wait to go back...
+Listen, people, it is being made known,
+that the best sleep is here!"</p>
+                    <p class="testimonial-author">— Dragan Juric</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"The apartments are to be commended. Every detail has been carefully thought out. It is very cozy and comfortable. What I would especially highlight is the unreal kindness, cordiality and human warmth of the apartment owner and his wife.
+Simply, the number of stars is too small to honestly assess the overall impression and satisfaction.
+I highly recommend it to everyone!"</p>
+                    <p class="testimonial-author">— Edin Zlotrg</p>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"We stayed for four days. The accommodation is very new and stylishly furnished. It's also very clean. The host was truly accommodating and helpful. We didn't lack anything. All in all, a fantastic place to stay. I highly recommend it to everyone!"</p>
+                    <p class="testimonial-author">— Günhan Kücükizsiz</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <div class="container">
+            <a href="https://www.booking.com/hotel/rs/apartments-kayaville.html" 
+            target="_blank" 
+            class="cta-button">
+            Check Availability
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Map -->
+    <div class="map-section">
+        <div class="container">
+            <h2>Our Location</h2>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2905.057390621577!2d20.00824367598104!3d43.27117347112277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4757dfdacf371d9d%3A0x5817fa25f5a91fc6!2sApartments%20Kayaville!5e0!3m2!1sen!2sba!4v1758547533316!5m2!1sen!2sba" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-section">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">apartmentskayaville@gmail.com</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-label">Phone</div>
+                    <div class="contact-value">+381 63 410095</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Apartments Kayaville. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 10);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+                // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxDesc = document.getElementById('lightbox-description');
+        const lightboxClose = document.getElementById('lightbox-close');
+
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img'); // uzmi sliku iz itema
+                const title = item.querySelector('h3').textContent;
+                const desc = item.querySelector('p').textContent;
+
+                // setuj podatke u lightbox
+                lightboxImage.src = img.getAttribute('src');
+                lightboxTitle.textContent = title;
+                lightboxDesc.textContent = desc;
+
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        // Klik izvan slike gasi lightbox
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+
+
+        document.querySelector('.cta-button').addEventListener('click', () => {
+            window.location.href = "https://www.booking.com/hotel/rs/apartments-kayaville.html";
+        });
+
+
+
+    </script>
+</body>
+</html>

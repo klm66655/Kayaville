@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        (function(){
+            emailjs.init("spcxdWK5_czwvRLD5"); // Public Key iz EmailJS dashboard-a
+        })();
+    </script>
+    <title>Luxury Apartments - Reservation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #0C3844;
+            overflow-x: hidden;
+        }
+
+
+      
+
+        /* Header */
+        header.header {
+            background: rgba(12, 56, 68, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            /* ukloni dodatni padding ako si imao */
+            padding: 0;              
+        }
+
+        .nav-container img {
+            height: 120px;              /* umesto width=150 stavi visinu da ograničiš */
+            width: auto;               /* zadrži proporcije */
+            display: block;
+        }
+
+        
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo img {
+          height: 120px; /* visina loga koja stane u navbar */
+          width: auto;  /* da proporcija ostane ista */
+          display: block;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #FFD700;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links li a.active {
+    color: #FFD700; /* narandžasta za aktivni link */
+    font-weight: 500;
+    
+}
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh; /* cijela visina ekrana */
+            background: linear-gradient(135deg, #0C3844 0%, #1e5f6f 100%);
+            
+            display: flex;
+            flex-direction: column;        /* vertikalni raspored */
+            justify-content: space-between; /* logo gore, dugme dole */
+            align-items: center;           /* centriraj horizontalno */
+            text-align: center;
+            
+            padding: 40px 20px; /* malo lufta od ivica */
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="0.8" fill="rgba(255,255,255,0.08)"/><circle cx="40" cy="80" r="1.2" fill="rgba(255,255,255,0.06)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-logo {
+           display: block;
+           max-width: 300px;   /* prilagodi po želji */
+           height: auto;
+           margin: 0 auto 0.5rem; /* centriranje i razmak od teksta */
+           z-index: 3;
+           position: relative;
+           margin-top: 140px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #0C3844;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+            animation: fadeInUp 1s ease-out 0.9s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .reservation-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #D4AF37;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #0C3844;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .guest-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #20B2AA, #48D1CC);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(32, 178, 170, 0.3);
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(32, 178, 170, 0.4);
+        }
+
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(39, 174, 96, 0.1));
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            color: #2ECC71;
+            margin-bottom: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .reservation-section {
+                padding: 2rem 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .guest-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Additional styling for better UX */
+        .form-group input[type="date"] {
+            color: #0C3844;
+        }
+
+        .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        .icon {
+            margin-right: 0.5rem;
+        }
+
+        /* Loading state */
+        .submit-button.loading {
+            background: linear-gradient(135deg, #95a5a6, #bdc3c7);
+            cursor: not-allowed;
+        }
+
+        .submit-button.loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html">
+                <img src="src/assets/images/1000025093.png" alt="Kayaville Logo" width="150">
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#" class="active">Reservation</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                </ul>
+                <button class="mobile-menu">☰</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <a href="index.html">
+              <img src="src/assets/images/1000025093.png" alt="Kayaville Logo" class="hero-logo">
+            </a>
+            <p>Experience luxury and comfort in our carefully curated apartments. Book your unforgettable getaway today.</p>
+            <a href="#reservation" class="cta-button">Book Now</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="reservation-section" id="reservation">
+            <h2 class="section-title">Make a Reservation</h2>
+            
+            <form id="reservationForm">
+                <div class="form-grid">
+                    <div>
+                        <div class="form-group">
+                            <label for="checkin">Check-in Date</label>
+                            <input type="date" id="checkin" name="checkin" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="checkout">Check-out Date</label>
+                            <input type="date" id="checkout" name="checkout" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="apartment_type">Apartment Type</label>
+                            <select id="apartment_type" name="apartment_type" required>
+                                <option value="">Select apartment type</option>
+                                <option value="Apartman 1">Deluxe Family Apartment (3 beds + kitchen)</option>
+                                <option value="Apartman 2">Balcony Comfort Apartment (2 beds + kitchen)</option>
+                                <option value="Apartman 3">Twin Standard Apartment (2 single beds)</option>
+                            </select>
+                        </div>
+                        
+                    </div>
+
+                    <div>
+                        <div class="form-group">
+                            <label>Number of Guests</label>
+                            <div class="guest-inputs">
+                                <div>
+                                    <label for="adults">Adults</label>
+                                    <input type="number" id="adults" name="adults" min="1" max="8" value="1" required>
+                                </div>
+                                <div>
+                                    <label for="children">Children</label>
+                                    <input type="number" id="children" name="children" min="0" max="4" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="special_requests">Special Requests</label>
+                    <textarea id="special_requests" name="special_requests" placeholder="Any special requirements or requests..."></textarea>
+                </div>
+                
+                <button type="submit" class="submit-button">Complete Reservation</button>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">✓</div>
+                <h3>Reservation Confirmed!</h3>
+                <p>Thank you for your booking. We've sent a confirmation email with all the details. We look forward to hosting you!</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkin').setAttribute('min', today);
+        document.getElementById('checkout').setAttribute('min', today);
+
+        // Update checkout minimum date when checkin changes
+        document.getElementById('checkin').addEventListener('change', function() {
+            const checkinDate = this.value;
+            const checkoutInput = document.getElementById('checkout');
+            checkoutInput.setAttribute('min', checkinDate);
+            
+            // If checkout is before checkin, reset it
+            if (checkoutInput.value && checkoutInput.value <= checkinDate) {
+                checkoutInput.value = '';
+            }
+        });
+
+        // Form submission
+        document.getElementById('reservationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitButton = document.querySelector('.submit-button');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Add loading state
+            submitButton.classList.add('loading');
+            submitButton.textContent = 'Processing...';
+            
+            // Simulate API call
+            setTimeout(function() {
+                // Hide form and show success message
+                document.getElementById('reservationForm').style.display = 'none';
+                successMessage.classList.add('show');
+                
+                // Remove loading state
+                submitButton.classList.remove('loading');
+                submitButton.textContent = 'Complete Reservation';
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        });
+
+        // Mobile menu functionality (basic)
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('reservation').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        });
+
+
+
+        
+
+        document.getElementById("reservationForm").addEventListener("submit", function(e){
+            e.preventDefault();
+            emailjs.sendForm(
+                "service_evcnuui",     // Service ID
+                "template_obrp9uk",     // Template ID
+                this                   // referenca na formu
+            )
+        });
+
+    </script>
+</body>
+</html>
