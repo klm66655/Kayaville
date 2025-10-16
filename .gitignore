@@ -22,10 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-# Ignore images
-src/assets/images/
-*.jpg
-*.jpeg
-*.png
-*.webp
-*.gif
