@@ -102,7 +102,10 @@
             display: none;
             flex-direction: column;
             cursor: pointer;
-        }
+            background: transparent;
+            border: none;
+            padding: 5px;
+                }
 
         .mobile-menu span {
             width: 25px;
@@ -110,8 +113,8 @@
             background: #fff;
             margin: 3px 0;
             transition: 0.3s;
+            border-radius: 2px;
         }
-
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -519,30 +522,69 @@
             .contact-info {
                 gap: 30px;
             }
+
+            /* Mobile Menu Styles */
+@media (max-width: 768px) {
+    .mobile-menu {
+        display: flex;
+    }
+
+    .nav-links {
+        position: fixed;
+        left: -100%;
+        top: 140px;
+        flex-direction: column;
+        background: rgba(12, 56, 68, 0.98);
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.3);
+        padding: 2rem 0;
+        gap: 0;
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .nav-links li {
+        margin: 1.5rem 0;
+    }
+
+    .mobile-menu.active span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .mobile-menu.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-menu.active span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+}
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav id="navbar">
-    <div class="nav-container">
-        <div class="logo">
-            <a href="index.html">
-                <img src="images/1000025093.png" alt="Kayaville Logo" width="150">
-            </a>
-        </div>
-
-
+        <div class="nav-container">
+            <div class="logo">
+                <a href="/index.html">
+                    <img src="images/1000025093.png" alt="Kayaville Logo" width="150">
+                </a>
+            </div>
             <ul class="nav-links">
                 <li><a href="/index.html">Home</a></li>
                 <li><a href="/reservation.html">Reservation</a></li>
-                <li><a href="/gallery.html" class="active">Gallery</a></li>         
+                <li><a href="/gallery.html" class="active">Gallery</a></li>
             </ul>
-            <div class="mobile-menu">
+            <button class="mobile-menu" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
         </div>
     </nav>
 
@@ -1001,6 +1043,25 @@ I highly recommend it to everyone!"</p>
         document.querySelector('.cta-button').addEventListener('click', () => {
             window.location.href = "https://www.booking.com/hotel/rs/apartments-kayaville.html";
         });
+
+        // Mobile Menu Toggle
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (mobileMenu && navLinks) {
+            mobileMenu.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+            });
+
+            // Close menu when clicking on a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                });
+            });
+        }
 
 
 

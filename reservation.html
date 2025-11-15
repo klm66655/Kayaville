@@ -107,11 +107,20 @@
 
         .mobile-menu {
             display: none;
-            background: none;
-            border: none;
-            color: #ffffff;
-            font-size: 1.5rem;
+            flex-direction: column;
             cursor: pointer;
+            background: transparent;
+            border: none;
+            padding: 5px;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
         }
 
         /* Hero Section */
@@ -409,23 +418,92 @@
                 transform: rotate(360deg);
             }
         }
+        /* Mobile Menu Styles */
+@media (max-width: 768px) {
+    .mobile-menu {
+        display: flex;
+    }
+
+    .nav-links {
+        position: fixed;
+        left: -100%;
+        top: 140px;
+        flex-direction: column;
+        background: rgba(12, 56, 68, 0.98);
+        width: 100%;
+        text-align: center;
+        transition: left 0.3s ease;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.3);
+        padding: 2rem 0;
+        gap: 0;
+        display: flex !important; /* DODAJ OVO - forsira display:flex */
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .nav-links li {
+        margin: 1.5rem 0;
+        display: block; /* DODAJ OVO */
+    }
+
+    .nav-links a {
+        display: block; /* DODAJ OVO */
+        padding: 0.5rem 1rem;
+    }
+
+    .mobile-menu.active span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .mobile-menu.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-menu.active span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+
+
+    .nav-links li {
+        margin: 1.5rem 0;
+    }
+
+    .mobile-menu.active span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+
+    .mobile-menu.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-menu.active span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+}
     </style>
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="nav-container">
-            <a href="index.html">
-                <img src="images/1000025093.png" alt="Kayaville Logo" width="150">
-            </a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="/index.html">Home</a></li>
-                    <li><a href="/reservation.html" class="active">Reservation</a></li>
-                    <li><a href="/gallery.html">Gallery</a></li>
-                </ul>
-                <button class="mobile-menu">☰</button>
-            </nav>
+            <div class="logo">
+                <a href="/index.html">
+                    <img src="images/1000025093.png" alt="Kayaville Logo" width="150">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/reservation.html" class="active">Reservation</a></li>
+                <li><a href="/gallery.html">Gallery</a></li>
+            </ul>
+            <button class="mobile-menu" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </header>
 
@@ -520,76 +598,82 @@
     </main>
 
     <script>
-        // Set minimum date to today
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('checkin').setAttribute('min', today);
-        document.getElementById('checkout').setAttribute('min', today);
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('checkin').setAttribute('min', today);
+    document.getElementById('checkout').setAttribute('min', today);
 
-        // Update checkout minimum date when checkin changes
-        document.getElementById('checkin').addEventListener('change', function() {
-            const checkinDate = this.value;
-            const checkoutInput = document.getElementById('checkout');
-            checkoutInput.setAttribute('min', checkinDate);
-            
-            // If checkout is before checkin, reset it
-            if (checkoutInput.value && checkoutInput.value <= checkinDate) {
-                checkoutInput.value = '';
-            }
+    // Update checkout minimum date when checkin changes
+    document.getElementById('checkin').addEventListener('change', function() {
+        const checkinDate = this.value;
+        const checkoutInput = document.getElementById('checkout');
+        checkoutInput.setAttribute('min', checkinDate);
+        
+        if (checkoutInput.value && checkoutInput.value <= checkinDate) {
+            checkoutInput.value = '';
+        }
+    });
+
+    // Mobile Menu Toggle (NOVO - PRAVILNO!)
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (mobileMenu && navLinks) {
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
         });
 
-        // Form submission
-        document.getElementById('reservationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitButton = document.querySelector('.submit-button');
-            const successMessage = document.getElementById('successMessage');
-            
-            // Add loading state
-            submitButton.classList.add('loading');
-            submitButton.textContent = 'Processing...';
-            
-            // Simulate API call
-            setTimeout(function() {
-                // Hide form and show success message
-                document.getElementById('reservationForm').style.display = 'none';
-                successMessage.classList.add('show');
-                
-                // Remove loading state
-                submitButton.classList.remove('loading');
-                submitButton.textContent = 'Complete Reservation';
-                
-                // Scroll to success message
-                successMessage.scrollIntoView({ behavior: 'smooth' });
-            }, 2000);
-        });
-
-        // Mobile menu functionality (basic)
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelector('.cta-button').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('reservation').scrollIntoView({ 
-                behavior: 'smooth' 
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenu.classList.remove('active');
             });
         });
+    }
 
-
-
-        
-
-        document.getElementById("reservationForm").addEventListener("submit", function(e){
-            e.preventDefault();
-            emailjs.sendForm(
-                "service_evcnuui",     // Service ID
-                "template_obrp9uk",     // Template ID
-                this                   // referenca na formu
-            )
+    // Smooth scrolling for anchor links
+    document.querySelector('.cta-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('reservation').scrollIntoView({ 
+            behavior: 'smooth' 
         });
+    });
 
-    </script>
+    // Form submission with EmailJS
+    document.getElementById("reservationForm").addEventListener("submit", function(e){
+        e.preventDefault();
+        
+        const submitButton = document.querySelector('.submit-button');
+        const successMessage = document.getElementById('successMessage');
+        
+        // Add loading state
+        submitButton.classList.add('loading');
+        submitButton.textContent = 'Processing...';
+        
+        emailjs.sendForm(
+            "service_evcnuui",
+            "template_obrp9uk",
+            this
+        ).then(function() {
+            // Hide form and show success message
+            document.getElementById('reservationForm').style.display = 'none';
+            successMessage.classList.add('show');
+            
+            // Remove loading state
+            submitButton.classList.remove('loading');
+            submitButton.textContent = 'Complete Reservation';
+            
+            // Scroll to success message
+            successMessage.scrollIntoView({ behavior: 'smooth' });
+        }, function(error) {
+            console.error('EmailJS Error:', error);
+            alert('Something went wrong. Please try again.');
+            submitButton.classList.remove('loading');
+            submitButton.textContent = 'Complete Reservation';
+        });
+    });
+</script>
 </body>
 </html>
